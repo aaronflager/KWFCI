@@ -1,0 +1,70 @@
+﻿@model KWFCI.Models.ViewModels.AdminVM
+
+
+<div class="row">
+    <div class="col-xs-12">
+        <table class="table table-bordered editTable">
+            <thead>
+                <tr>
+                    <th>Edit</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                    <th>Type</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Broker b in Model.Brokers)
+                {
+                    <tr class="broker-parentElem">
+                        <td>
+                            <button class="btn btn-primary btn-md" data-toggle="modal" data-target="#adminEditBroker"
+                                    data-id="@b.BrokerID">
+                                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                            </button>
+                        </td>
+
+                        <td class="broker-firstName">
+                            @b.FirstName
+                            <input type="hidden" class="broker-notifications" value="@b.EmailNotifications" />
+                        </td>
+
+                        <td class="broker-lastName">
+                            @b.LastName
+                        </td>
+
+                        <td class="broker-email">
+                            @b.Email
+                        </td>
+
+                        <td class="broker-status">
+                            @b.Status
+                        </td>
+
+                        <td class="broker-type">
+                            @b.Type
+                        </td>
+
+                        <td>
+                            <form asp-action="BrokerDelete" asp-route-id="@b.BrokerID" method="post">
+                                <button type="submit"
+                                        class="btn btn-sm btn-danger center-block">
+                                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        @Html.Partial("Modals/_AdminEditBrokerModal", Model.NewBroker)
+    </div>
+</div>
+
+<style>
+    table, tr, th {
+        border: 1px solid black;
+    }
+</style>

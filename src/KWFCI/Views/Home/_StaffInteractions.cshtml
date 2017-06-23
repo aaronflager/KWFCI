@@ -1,0 +1,53 @@
+﻿@model KWFCI.Models.ViewModels.HomeStaffInteractionsVM
+@using KWFCI.Models.ViewModels
+
+<div class="row">
+    <div class="col-xs-12">
+        <table class="table table-bordered table-hover editTable">
+            <thead class="row">
+                <tr>
+                    <th class="col-xs-2">Broker</th>
+                    <th class="col-xs-4">Notes</th>
+                    <th class="col-xs-2">Date</th>
+                    <th class="col-xs-4">Next Step</th>
+                </tr>
+            </thead>
+            <tbody class="row">
+                @foreach (Interaction a in Model.PersonalInteractions)
+                {
+                    foreach (Broker b in Model.Brokers)
+                    {
+                        if (b.Interactions.Contains(a))
+                        {
+                            <tr style="height:100%;">
+                                <td class="col-xs-2">
+                                    <div class="alignCell-Parent">
+
+                                        <div class="alignCell">
+                                            <a href="@Url.Action("BrokerInteractions", "Interactions", new { BrokerID = b.BrokerID })">
+                                                @b.FirstName @b.LastName
+                                            </a> 
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="col-xs-4">
+                                    <div class="col-xs-12">
+                                        <div class="alignCell-Parent"><span class="alignCell ellipsis">@a.Notes</span></div>
+                                    </div>
+                                </td>
+                                <td class="col-xs-2">
+                                    @a.DateCreated
+                                </td>
+                                <td class="col-xs-4" style="height:100%;">
+                                    <div class="col-xs-10" style="height:100%;">
+                                        <div style="height:100%;" class="ellipsis"><span class="align-middle">@a.NextStep</span></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

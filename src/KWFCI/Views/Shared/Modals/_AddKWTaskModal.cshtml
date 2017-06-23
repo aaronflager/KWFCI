@@ -1,0 +1,126 @@
+﻿@model KWFCI.Models.ViewModels.KWTaskVM
+
+
+<div class="modal fade" id="addKWTaskModal" tabindex="-1" role="dialog" aria-labelledby="addKWTaskModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h2 class="modal-title">New Task@*<em>TODO: Use JavaScript to dynamically make this the broker name while being typed</em>*@</h2>
+            </div>
+            <div class="modal-body clearfix" id="assignStaffList2">
+
+                <form asp-controller="Tasks" asp-action="Add" method="post">
+                    <div asp-validation-summary="All" class="text-danger center-block"></div>
+
+                    <div class="form-group center-block modal-form">
+
+                        <div class="row">
+                            <div class="col-xs-12"><label asp-for="@Model.NewKWTask.Message">Message:</label></div>
+                            <div class="col-xs-12"><textarea asp-for="@Model.NewKWTask.Message" class="form-control taskMessage" rows="5"></textarea></div>
+                        </div>
+                        <div class="row">
+                            @{
+                                string dateDue = "";
+                                if (Model.NewKWTask.AlertDate != null)
+                                {
+                                    string[] splitDate = Model.NewKWTask.DateDue.ToString().Split(' ');
+                                    dateDue = splitDate[0];
+                                }
+                            }
+                            <div class="col-xs-4" style="margin-top:7px;"><label asp-for="@Model.NewKWTask.DateDue">Date Due:</label></div>
+                            <div class="col-xs-8"><input type="text" 
+                                                         data-date-start-date="@KWFCI.Helper.Today" 
+                                                         data-date-autoclose="true" 
+                                                         data-date-clear-btn="true" 
+                                                         data-date-today-highlight="true" 
+                                                         data-provide="datepicker" 
+                                                         asp-for="@Model.NewKWTask.DateDue" 
+                                                         value="@dateDue" 
+                                                         class="form-control modal-TaskDateDue" /></div>
+                        </div>
+                        <div class="row">
+                            @{
+                                string alertDate = "";
+                                if (Model.NewKWTask.AlertDate != null)
+                                {
+                                    string[] splitAlertDate = Model.NewKWTask.AlertDate.ToString().Split(' ');
+                                    alertDate = splitAlertDate[0];
+                                }
+                            }
+                            <div class="col-xs-4" style="margin-top:7px;"><label asp-for="@Model.NewKWTask.AlertDate">Alert Date:</label></div>
+                            <div class="col-xs-8"><input type="text"
+                                                         data-date-start-date="@KWFCI.Helper.Today"
+                                                         data-date-end-date="" 
+                                                         data-date-autoclose="true" 
+                                                         data-date-clear-btn="true" 
+                                                         data-date-today-highlight="true" 
+                                                         data-provide="datepicker" 
+                                                         asp-for="@Model.NewKWTask.AlertDate" 
+                                                         value="@alertDate" 
+                                                         class="form-control modal-TaskAlertDate" /></div>
+                        </div>
+
+                        <div class="row priorityRow">
+                            <div class="col-xs-4" style="margin-top:7px;"><label asp-for="@Model.NewKWTask.Priority">Priority:</label></div>
+                            <div class="col-xs-8">
+                                <select class="form-control" asp-for="@Model.NewKWTask.Priority">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">Critical</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-4"><label style="margin-bottom:0px;padding-top: 7px;">Assign:</label></div>
+    
+                            <div class="col-xs-8">
+                                <div class="dropdown">
+                                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Select a staff member
+                                        <span class="caret"></span>
+                                    </button>
+                                    <div class="dropdown-menu assign">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control search" placeholder="Search" aria-describedby="search-broker">
+                                            <span class="input-group-addon"><i class="fa fa-search" aria-hidden="true"></i></span>
+                                        </div>
+                                        <ul class="list list-group" style="margin-bottom:0px; width:100%;">
+                                            <li class="list-group-item" data-value="Clear">Clear</li>
+
+                                            @foreach (StaffProfile staff in Model.StaffList)
+                                            {
+                                                string staffName = staff.FirstName + " " + staff.LastName;
+                                                <li class="list-group-item" data-id="@staff.StaffProfileID" data-value="@staffName" style="display:flex;justify-content:space-between;">
+                                                    <div class="name" style="width:36%;">
+                                                        @staffName
+                                                    </div>
+                                                    <div style="width:2%;">
+                                                        |
+                                                    </div>
+                                                    <div style="width:49%;text-align:right;">
+                                                        <span class="email">@staff.Email</span>
+                                                    </div>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+
+                        <input type="hidden" asp-for="@Model.NewKWTask.DateCreated" />
+                        <input type="hidden" class="return-url" name="returnURL" value="" />
+                        <input type="hidden" name="StaffProfileID" value="" />
+
+                        <button type="submit" class="btn btn-primary pull-right grab-url">Create Task</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
